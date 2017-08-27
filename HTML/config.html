@@ -1,0 +1,125 @@
+﻿<html>
+<head>
+  <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/buefy"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/buefy/lib/buefy.css">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <!-- <link rel="stylesheet" type="text/css" href="materialdesignicons.css"> -->
+  
+</head>
+<body>
+    <section class="hero is-primary">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title"> Configuration </h1>
+          <h2 class="subtitle"> Patch HTML </h2>
+        </div>
+      </div>
+    </section>
+
+    <br/>
+
+    <div id="app">
+      <div class="columns is-centered">
+        <div class="column is-half">
+          <form class="box" v-on:submit.prevent="submit">
+
+            <b-field label="Webserver Root">
+              <b-select v-model="model.root" placeholder="Select a root folder or file">
+                <option v-for="root in model.roots" :value="root">
+                  {{ root }}
+                </option>
+              </b-select>
+            </b-field>
+
+            <b-field label="Location to Patch">
+              <div class="block">
+                <b-field>
+                  <b-radio-button v-model="model.position"
+                                  native-value="start">
+                      <b-icon icon="vertical_align_top"></b-icon>
+                      <span>Start</span>
+                  </b-radio-button>
+
+                  <b-radio-button v-model="model.position"
+                                  native-value="end">
+                      <b-icon icon="vertical_align_bottom"></b-icon>
+                      <span>End</span>
+                  </b-radio-button>
+
+                  <span>&nbsp;&nbsp;&nbsp;</span>
+                  <b-radio-button v-model="model.element"
+                                  native-value="head">
+                      <b-icon icon="subject"></b-icon>
+                      <span>Head</span>
+                  </b-radio-button>
+
+                  <b-radio-button v-model="model.element"
+                                  native-value="body">
+                      <b-icon icon="web"></b-icon>
+                      <span>Body</span>
+                  </b-radio-button>
+                <b-field>
+              </div>
+            </b-field>
+
+            <b-field label="HTML to Add">
+              <b-input v-model="model.patch" type="textarea" maxlength="5000"></b-input>
+            </b-field>
+
+            <button class="button is-primary" :disabled="isDisabled">Submit</button>
+            
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+        Vue.use(Buefy.default)
+
+        var App = new Vue({
+          el: '#app',
+          data: {
+            model: {
+              position: 'start',
+              element: 'body',
+              patch: '',
+              roots: ['wwwroot'],
+              root: 'wwwroot',
+            }
+          },
+          created: function () {
+            axios.get('/config/read')
+              .then(function (response) {
+                console.log(response);
+                App.model.element = response.data.element;
+                App.model.position = response.data.position;
+                App.model.patch = response.data.patch;
+                App.model.roots = response.data.roots;
+                App.model.root = response.data.root;
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          }, 
+          methods: {
+            submit: function(ev) {
+              axios.post('/config/write', {
+                Element: this.model.element,
+                Position: this.model.position,
+                Patch: this.model.patch,
+                Root: this.model.root
+              })
+              .then( this.$toast.open({
+                message: 'Patch Configuration Saved',
+                type: 'is-success'
+              }))
+            }
+          }
+        })
+
+    </script>
+</body>
+</html>
+
