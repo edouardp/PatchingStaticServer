@@ -15,7 +15,7 @@ namespace PatchingStaticServer.Controllers
 
         public ConfigController()
         {
-            m_appDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            m_appDirectory = Global.AppDirectory;
         }
 
         [HttpGet("config.html")]

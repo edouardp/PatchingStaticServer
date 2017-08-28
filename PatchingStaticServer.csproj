@@ -5,8 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
     <Folder Include="HTML\" />
+    <Folder Include="Content\" />
+    <Folder Include="Content\wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,14 +19,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Scripts\config.js" />
     <None Remove="HTML\config.html" />
+    <None Remove="Content\wwwroot\test.html" />
+    <None Update="Content\wwwroot\test.html">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="HTML\config.html" />
   </ItemGroup>
   <ItemGroup>
-    <Content Update="wwwroot\test.html">
+    <Content Include="Content\wwwroot\test.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

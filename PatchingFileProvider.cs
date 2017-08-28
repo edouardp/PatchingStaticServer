@@ -20,7 +20,7 @@ namespace PatchingStaticServer
             }
             else
             {
-                var fullPath = Path.Combine(Global.Root, subpath);
+                var fullPath = Path.Combine(Global.AppDirectory, Global.Root, subpath);
                 var fileInfo = new FileInfo(fullPath);
                 return new PatchablePhysicalFileInfo(fileInfo);
             }

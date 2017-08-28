@@ -24,7 +24,7 @@ namespace PatchingStaticServer
 		public enum PatchElement { Head, Body };
 		public enum PatchPosition { Start, End };
 
-		public static string AppDirectory { get; } = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+        public static string AppDirectory { get; } = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Content");
 
 		public static string Patch { get; set; } = "<script>alert('Bong!')</script>";
 		public static PatchElement Element { get; set; } = PatchElement.Body;
