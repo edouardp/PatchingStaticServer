@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace PatchingStaticServer
 {
@@ -15,7 +17,7 @@ namespace PatchingStaticServer
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseConfiguration(new ConfigurationBuilder().AddCommandLine(args).Build())  // --urls "http://*:1234"
                 .Build();
     }
 
@@ -32,6 +34,3 @@ namespace PatchingStaticServer
         public static string Root { get; set; } = "wwwroot";
     }
 }
-
-
-
